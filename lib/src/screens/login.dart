@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:vacpass_app/src/screens/CustomTextField.dart';
+import './FirebaseService.dart';
 import '../route.dart';
 
 
@@ -12,136 +13,14 @@ class LoginScreen extends StatefulWidget {
 
 
 class _LoginScreenState extends State<LoginScreen> {
-  final auth = FirebaseAuth.instance;
+
   final _formKey = GlobalKey<FormState>();
 
- TextEditingController _email = TextEditingController();
- TextEditingController _password = TextEditingController();
- String _emaillabel = '';
- String _passwordlabel = '';
-  
-  
-  Widget buildEmail() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-            _emaillabel,
-            style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold
-          ),
-        ),
-        SizedBox(height: 10),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 6,
-                offset: Offset(0,2),
-              )
-            ]
-          ),
-          height: 60,
-          
-          child: TextFormField(
-            keyboardType: TextInputType.emailAddress,
-            controller: _email,
-            validator: (String value) {
-              if (value.isEmpty) return 'Email is Required';
-                if (!RegExp( r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").hasMatch(value)) {
-                    return 'Please enter a valid email Address';
-                }
-                  return null;
-            },
-            style: TextStyle(
-              color: Colors.black87,
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14),
-              prefixIcon: Icon(
-                Icons.email,
-                color: Colors.pinkAccent
-              ),
-              hintText: 'Email',
-              hintStyle: TextStyle(
-                color: Colors.black38
-              )
-            ),
-            onChanged: ((value){
-              if(_email.text.isNotEmpty && _email.text.length == 1) setState(() {_emaillabel = 'Email address'; });
-              if(_email.text.isEmpty) setState(() {_emaillabel = ''; });
-            }),
-          )
-        ),
-      ],
-    );
-}
+ final TextInputType keyEmail = TextInputType.emailAddress;
+ final TextEditingController _email = TextEditingController();
 
-Widget buildpassword() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-            _passwordlabel,
-            style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.bold
-          ),
-        ),
-        SizedBox(height: 12),
-        Container(
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 6,
-                offset: Offset(0,2),
-              )
-            ]
-          ),
-          height: 60,
-          child: TextFormField(
-            obscureText: true,
-            controller: _password,
-            validator: (String value) {
-              if (value.isEmpty) return 'Password is Required';
-                 return null;
-            },
-            style: TextStyle(
-              color: Colors.black87,
-            ),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: 14),
-              prefixIcon: Icon(
-                Icons.lock,
-                color: Colors.pinkAccent
-              ),
-              hintText: 'password',
-              hintStyle: TextStyle(
-                color: Colors.black38
-              )
-            ),
-            onChanged: ((value){
-              if(_password.text.isNotEmpty && _password.text.length == 1) setState(() {_passwordlabel = 'Password'; });
-              if(_password.text.isEmpty) setState(() {_passwordlabel = ''; });
-            }),
-          )
-        ),
-      ],
-    );
-}
+ final TextInputType keyPass = TextInputType.text;
+ TextEditingController _password = TextEditingController();
 
 Widget buildForgetPassword(){
   return Container(
@@ -181,29 +60,7 @@ Widget buildLoginBtn(){
         ),
         onPressed: (){
           if (_formKey.currentState.validate()) {
-            try{
-              auth.signInWithEmailAndPassword(email: _email.text, password: _password.text).then((_){
-                  FirebaseFirestore
-                  .instance
-                  .collection('users')
-                  .doc(auth.currentUser.uid)
-                  .get()
-                  .then((snapshot) => {
-                      if(snapshot.exists){
-                        if(snapshot.data()['role'] == 'verifier')
-                          Navigator.of(context).pushNamed(AppRoutes.authVerifier)
-                        else
-                          Navigator.of(context).pushNamed(AppRoutes.authHome),
-                      }else print('snapshot does not exist'),
-                    } 
-                  );
-                }
-              );
-            } on PlatformException catch(e){
-              print(e.message);
-            } on Exception catch(e){
-              print(e);
-            }
+            DatabaseService().signIn(context,_email.text,_password.text);
           }
         },
     )
@@ -275,12 +132,12 @@ Widget buildSignUpBtn(){
                   children: <Widget>[
                     Material(
                       color: Colors.transparent,
-                      child:  Image.asset('Images/vacpass-logo2.png', width:100, height: 100),
+                      child:  Image.asset('Images/vacpass-logo2.png', width:120, height: 120),
                     ),
                     Text('Vacpass',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 50,
+                        fontSize: 40,
                         fontWeight: FontWeight.bold
                       )
                     ),
@@ -290,9 +147,9 @@ Widget buildSignUpBtn(){
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget> [
                           SizedBox(height: 50),
-                          buildEmail(),
+                          CustomTextField(this._email, this.keyEmail, 'Email Address', 'email', false),
                           SizedBox(height: 20),
-                          buildpassword(),
+                          CustomTextField(this._password, this.keyPass, 'Password', 'password', true),
                           buildForgetPassword(),
                           buildLoginBtn(),
                           buildSignUpBtn(),  

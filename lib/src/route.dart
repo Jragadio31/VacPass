@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'screens/login.dart';
 import 'screens/register.dart';
-import 'screens/homeverifier.dart';
 import 'screens/home.dart';
 import 'screens/passenger.dart';
+import 'screens/verifiernavigation.dart';
 
 class AppRoutes{
   AppRoutes._();
@@ -18,8 +18,8 @@ class AppRoutes{
     return{
       authLogin: (context) => LoginScreen(),
       authRegister: (context) => RegisterScreen(),
-      authHome: (context) => Home(),
-      authVerifier: (context) => Verifier(),
+      //authPassenger: (context) => Passenger(),
+      authVerifier: (context) => VerifierNav(),
       authPassenger: (context) => Passenger(),
     };
   }
