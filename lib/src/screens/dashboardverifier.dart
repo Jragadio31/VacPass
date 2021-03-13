@@ -1,9 +1,12 @@
 
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 
@@ -16,6 +19,7 @@ class VerifierHomeScreen extends State<Verifier> {
 
  final auth = FirebaseAuth.instance;
  final db = FirebaseFirestore.instance;
+ Map data;
 
 String uid;
  Position pos;
@@ -23,29 +27,23 @@ String uid;
 Future<void> scan() async{
   try{
       String barcode = await scanner.scan();
-      // pos = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      // GeoPoint point = GeoPoint(pos.latitude,pos.longitude);
+      pos = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      GeoPoint point = GeoPoint(pos.latitude,pos.longitude);
 
       setState(() {
         var code = barcode.split('.');
         uid = code[0];
 
-        // try{
-        //   db
-        //   .collection('VacpassHistory')
-        //   .add({
-        //     'Passenger_uid': barcode,
-        //     'Verifier_uid': auth.currentUser.uid,
-        //     'Date': DateTime.now(),
-        //     'Location': point,
-        //   });
           showDialog(context: context, builder: (context){
             return Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                ),
                 child: Container(
                   width: MediaQuery.of(context).size.width / 1.5,
                   height: MediaQuery.of(context).size.height / 3,
                   child:  Center(
-                      child: Column( 
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Row(
@@ -83,17 +81,36 @@ Future<void> scan() async{
                               Text(code[5],style: TextStyle(color: Colors.grey,fontSize: 20),),
                             ]
                           ),
-                          code[6] == 'true' ? confirmedPass() : validationButton(),
+                          code[6] == 'true' ? confirmedPass() : rejectPass(),
+                          RaisedButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                            ),
+                            onPressed: (){
+                                try{
+                                  db
+                                  .collection('VacpassHistory')
+                                  .add({
+                                    'Passenger_uid': barcode,
+                                    'Verifier_uid': auth.currentUser.uid,
+                                    'Date': DateTime.now(),
+                                    'Location': point,
+                                  });
+                                } on Exception {
+                                  print('failed');
+                                }
+                                code = null; 
+                                Navigator.of(context).pop(); 
+                            },
+                            color: Colors.green[700],
+                            child: Text('Close'),
+                          )
                         ],
                       ),
                     ),
                 ),
             );
           });
-        // } on Exception {
-        //   print('failed');
-        // }
-        // code = null;
       });
   } on PlatformException catch(e){
     print(e.message+'message');
@@ -111,34 +128,17 @@ Future<void> scan() async{
       );
   }
 
-  Widget validationButton(){
+  Widget rejectPass(){
     return 
       Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          RaisedButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-            ),
-            color: Colors.redAccent,
-            onPressed: (){
-              FirebaseFirestore.instance.collection('users').doc(uid).update({'Status': false});
-            },
-            child: Text('Reject'),
-          ),
-          RaisedButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-            ),
-            color: Colors.greenAccent,
-            onPressed: (){
-              FirebaseFirestore.instance.collection('users').doc(uid).update({'Status': true});
-            },
-            child: Text('Confirm'),
-          )
+          Text('Reject ',style: TextStyle(color: Colors.green[700],fontSize: 18),),
+          Icon(Icons.close_fullscreen_sharp, color: Colors.green[700],),
         ]
       );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -146,9 +146,17 @@ Future<void> scan() async{
        child: FutureBuilder<DocumentSnapshot> (
          future: db.collection('users').doc(auth.currentUser.uid).get(),
          builder: (context, snapshot){  
-          Map data = snapshot.data.data();
+          if(!snapshot.hasData){
+            Timer(Duration(seconds: 2),()=> print('reload'));
+          }
+          
+          if(snapshot.hasData) {
+            data = snapshot.data.data();
+            print('has data');
+          }
+
           return Container(
-            child: Scaffold(
+            child: !snapshot.hasData? animate() : Scaffold(
               appBar: 
                 AppBar(
                   title: Text('Dashboard', style: TextStyle(color: Colors.pinkAccent,fontSize: 28),), 
@@ -160,15 +168,15 @@ Future<void> scan() async{
                 builder: (context, constrainst){
                   return Container(
                     alignment: Alignment.topCenter,
-                    height: constrainst.biggest.height,
+                    height: MediaQuery.of(context).size.height,
                     decoration: BoxDecoration(color: Colors.white),
-                    child: Column(
+                    child: ListView(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(height:140),
+                            SizedBox(height:150),
                             CircleAvatar(
                               backgroundImage: AssetImage('Images/dasha.png'),
                               radius: 70,
@@ -179,7 +187,7 @@ Future<void> scan() async{
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(height:10),
-                            Text('Dash D. Putin', style: TextStyle(fontSize: 22),),
+                            Text(data['F_name'] +' '+ data['L_name'], style: TextStyle(fontSize: 22),),
                             FlatButton(onPressed: (){},
                              child: Text('View Profile',style: TextStyle(color: Colors.grey,),)
                             ),
@@ -221,6 +229,20 @@ Future<void> scan() async{
          },
        ), 
      );
+  }
+}
+
+Widget animate(){
+  @override 
+  Widget build(BuildContext context){
+    Timer(Duration(seconds: 2),()=> print('reloads'));
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SpinKitCircle(
+        color: Colors.pinkAccent,
+        size: 50,
+      ),
+    );
   }
 }
 

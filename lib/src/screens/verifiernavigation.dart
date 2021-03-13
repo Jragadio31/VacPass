@@ -3,6 +3,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dashboardverifier.dart';
+import 'historyverifier.dart';
+import 'profileverifier.dart';
 
 class VerifierNav extends StatefulWidget {
   @override
@@ -16,8 +18,8 @@ class _VerifierScreen extends State<VerifierNav> {
 
   List<Widget> _widgetOptions = <Widget>[
     Verifier(),
-    Text('Messgaes Screen'),
-    Text('Profile Screen'),
+    History(),
+    Profile(),
   ];
 
   

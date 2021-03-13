@@ -274,6 +274,7 @@ Widget buildSignInBtn(){
                     'RT_PCR_Date': _lastRTPCR,
                   }).then((value) =>
                       Navigator.of(context).pushNamed(AppRoutes.authHome)
+                      
                   );
               });
             } on FirebaseAuthException catch(e){
