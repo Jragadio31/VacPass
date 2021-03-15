@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoder/geocoder.dart';
 
-class History extends StatefulWidget{
+class HistoryPassenger extends StatefulWidget{
   @override 
   HistoryView createState() => HistoryView();
 }
 
-class HistoryView extends State<History>{
+class HistoryView extends State<HistoryPassenger>{
   Map data;
  final db = FirebaseFirestore.instance;
  final auth = FirebaseAuth.instance;

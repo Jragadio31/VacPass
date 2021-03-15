@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dashboard.dart';
+import 'dashboardpassenger.dart';
 import 'profile.dart';
+import 'historypassenger.dart';
 // import './home.dart';
 
 class Passenger extends StatefulWidget {
@@ -15,7 +16,7 @@ class _PassScreen extends State<Passenger> {
   List<Widget> _widgetOptions = <Widget>[
     
     Dashboard(),
-    Text('Messeges Screen'),
+    HistoryPassenger(),
     Profile(),
   ];
 

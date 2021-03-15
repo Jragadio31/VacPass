@@ -134,7 +134,7 @@ Widget buildSignUpBtn(){
                       color: Colors.transparent,
                       child:  Image.asset('Images/vacpass-logo2.png', width:120, height: 120),
                     ),
-                    Text('Vacpass',
+                    Text('VaxPass',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 40,
