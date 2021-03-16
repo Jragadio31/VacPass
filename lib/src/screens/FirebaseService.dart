@@ -37,4 +37,9 @@ class DatabaseService {
     auth.signOut();
     Navigator.of(context).pop();
   }
+
+  void resetPassword( BuildContext context, _email){
+    auth.sendPasswordResetEmail(email: _email);
+    Navigator.of(context).pop();
+  }
 }

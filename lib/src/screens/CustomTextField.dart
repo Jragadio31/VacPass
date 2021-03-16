@@ -1,28 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:vacpass_app/src/screens/ValidatorFunction.dart';
 
-class CustomTextField extends StatelessWidget{
+class CustomTextField extends StatefulWidget{
+
   final String action;
   final TextEditingController _controller;
   final TextInputType keyType;
   final String label;
-  final bool obs;
+  bool obs;
 
   CustomTextField(this._controller, this.keyType, this.label, this.action, this.obs);
-
+  @override 
+  CustomInputField createState()=> CustomInputField();
+}
+class CustomInputField extends State<CustomTextField>{
   Icon iconStyle(){
-    if(action == 'email') return Icon(Icons.email, color: Colors.purple[300]);
-    if(action == 'password') return Icon(Icons.lock, color: Colors.purple[300]);
-    if(action == 'lastname') return Icon(Icons.person, color: Colors.purple[300]);
-    if(action == 'firstname') return Icon(Icons.person, color: Colors.purple[300]);
-    if(action == 'address') return Icon(Icons.location_city, color: Colors.purple[300]);
-    if(action == 'brandname') return Icon(Icons.branding_watermark, color: Colors.purple[300]);
-    if(action == 'brandnumber') return Icon(Icons.format_list_numbered, color: Colors.purple[300]);
-    if(action == 'physician') return Icon(Icons.local_hospital, color: Colors.purple[300]);
-    if(action == 'placevaccined') return Icon(Icons.add_location, color: Colors.purple[300]);
-    if(action == 'licensenumber') return Icon(Icons.credit_card, color: Colors.purple[300]);
-    if(action == 'manufacturer') return Icon(Icons.business, color: Colors.purple[300]);
+    if(widget.action == 'email') return Icon(Icons.email, color: Colors.purple[300]);
+    if(widget.action == 'password') return Icon(Icons.lock, color: Colors.purple[300]);
+    if(widget.action == 'lastname') return Icon(Icons.person, color: Colors.purple[300]);
+    if(widget.action == 'firstname') return Icon(Icons.person, color: Colors.purple[300]);
+    if(widget.action == 'address') return Icon(Icons.location_city, color: Colors.purple[300]);
+    if(widget.action == 'brandname') return Icon(Icons.branding_watermark, color: Colors.purple[300]);
+    if(widget.action == 'brandnumber') return Icon(Icons.format_list_numbered, color: Colors.purple[300]);
+    if(widget.action == 'physician') return Icon(Icons.local_hospital, color: Colors.purple[300]);
+    if(widget.action == 'placevaccined') return Icon(Icons.add_location, color: Colors.purple[300]);
+    if(widget.action == 'licensenumber') return Icon(Icons.credit_card, color: Colors.purple[300]);
+    if(widget.action == 'manufacturer') return Icon(Icons.business, color: Colors.purple[300]);
   }
+  // Icon suffixIcon(){
+  //   if(widget.action == 'password') return Icon(Icons.visibility, color: Colors.purple[300]);
+  // }
 
   @override
   Widget build(BuildContext context){
@@ -46,10 +53,10 @@ class CustomTextField extends StatelessWidget{
           ),
           height: 60,
           child: TextFormField(
-            obscureText: this.obs,
-            controller: this._controller,
+            obscureText: widget.obs,
+            controller: widget._controller,
             validator: (String value){
-              return ValidatorFunction(action).validate(value);
+              return ValidatorFunction(widget.action).validate(value);
             },
             style: TextStyle(
               color: Colors.black87,
@@ -58,14 +65,22 @@ class CustomTextField extends StatelessWidget{
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14),
               prefixIcon: iconStyle(),
-              hintText: this.label,
+              hintText: widget.label,
               hintStyle: TextStyle(
                 color: Colors.black38
-              )
+              ),
+              suffixIcon: widget.action == "password" ? viewIcon() : null,
             ),
           ),
-        )
+         )
       ],
+    );
+  }
+
+  IconButton viewIcon (){
+    return IconButton(
+      onPressed:  (){setState(() {widget.obs = !widget.obs; });},
+      icon: widget.obs ? Icon(Icons.visibility_off) : Icon(Icons.visibility)
     );
   }
 }

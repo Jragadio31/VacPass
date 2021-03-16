@@ -46,9 +46,12 @@ class HistoryView extends State<History>{
       stream: users.snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
+          
           return Text('Something went wrong');
+          
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
+
           return Text("");
         }
         
@@ -63,12 +66,14 @@ class HistoryView extends State<History>{
                   elevation: 0,
                 ),
               body: ListView(
-                children: snapshot.data.docs.map((DocumentSnapshot document) {
-
-                  return new ListTile(
-                    title: new Text(convertDate(document.data()['Date'])),
-                    subtitle: new Text(convertGeoPointToCoordinate(document.data()['Location'])?.addressLine ?? 'Address'),
-                  );
+                children: snapshot.data.docs.map((DocumentSnapshot document) {             
+                 if(document.data()['Verifier_uid'].toString() == auth.currentUser.uid){
+                     return new ListTile(
+                      title: new Text(convertDate(document.data()['Date'])),
+                      subtitle: new Text(convertGeoPointToCoordinate(document.data()['Location'])?.addressLine ?? 'Address'),
+                    );
+                } 
+                  
                 }).toList(),
               ),
             ),

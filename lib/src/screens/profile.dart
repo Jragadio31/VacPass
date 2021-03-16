@@ -33,15 +33,15 @@ class _ProfileState extends State<Profile> {
     return Stack(
       children: <Widget>[
         CircleAvatar( 
-                      radius: 82.0,
-                      backgroundImage: _imageFile == null?
-                      AssetImage('Images/user.png'):
-                      FileImage(File(_imageFile.path)),
-                      
-                    ),
-                      Positioned(bottom: 20, 
-                          right: 20,
-                          child: InkWell(
+                radius: 82.0,
+                backgroundImage: _imageFile == null?
+                AssetImage('Images/user.png'):
+                FileImage(File(_imageFile.path)),
+                
+              ),
+                Positioned(bottom: 20, 
+                    right: 20,
+                    child: InkWell(
               onTap: (){
                 showModalBottomSheet(context: context, builder: ((builder) => bottomSheet()));
               },
@@ -101,8 +101,6 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-
-  
 
     return Center(
         child: StreamBuilder<DocumentSnapshot>(
@@ -167,50 +165,37 @@ class _ProfileState extends State<Profile> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget> [
                               Container(
-                                alignment: Alignment.center,
+                                alignment: Alignment.centerLeft,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(20),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.pinkAccent,
-                                        blurRadius: 6,
-                                        offset: Offset(0,2),
-                                      )
-                                    ]
+                             
                                 ),
-                                height: 40,
+                                height: 25,
                                 width: 300,
                                 child: Text(
                                 'Name: ' + data['F_name'] + ' ' + data['L_name'],
                                 style: TextStyle(
-                                  color: Colors.pink,
+                                  color: Colors.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold
                                 ),
                               ),
                               ),
                               SizedBox(height: 10),
-
                               Container(
-                                          alignment: Alignment.center,
+                                          alignment: Alignment.centerLeft,
                                           decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius: BorderRadius.circular(20),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.pinkAccent,
-                                                  blurRadius: 6,
-                                                  offset: Offset(0,2),
-                                                )
-                                              ]
+                                            
                                           ),
                                           height: 25,
                                           width: 300,
                                           child: Text(
                                           'Manufacturer Brand: ' + data['M_Brand'],
                                           style: TextStyle(
-                                            color: Colors.pink,
+                                            color: Colors.black,
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold
                                           ),
@@ -218,24 +203,18 @@ class _ProfileState extends State<Profile> {
                               ),
                               SizedBox(height: 10),
                               Container(
-                                          alignment: Alignment.center,
+                                          alignment: Alignment.centerLeft,
                                           decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius: BorderRadius.circular(20),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.pinkAccent,
-                                                  blurRadius: 6,
-                                                  offset: Offset(0,2),
-                                                )
-                                              ]
+                                            
                                           ),
                                           height: 25,
                                           width: 300,
                                           child: Text(
                                           'Brand Name: '+ data['Brand_name'],
                                           style: TextStyle(
-                                            color: Colors.pink,
+                                            color: Colors.black,
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold
                                           ),
@@ -243,24 +222,18 @@ class _ProfileState extends State<Profile> {
                               ),
                               SizedBox(height: 10),
                               Container(
-                                          alignment: Alignment.center,
+                                          alignment: Alignment.centerLeft,
                                           decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius: BorderRadius.circular(20),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.pinkAccent,
-                                                  blurRadius: 6,
-                                                  offset: Offset(0,2),
-                                                )
-                                              ]
+                                            
                                           ),
                                           height: 25,
                                           width: 300,
                                           child: Text(
                                           'Brand Number: ' + data['Brand_number'].toString(),
                                           style: TextStyle(
-                                            color: Colors.pink,
+                                            color: Colors.black,
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold
                                           ),
@@ -268,24 +241,18 @@ class _ProfileState extends State<Profile> {
                               ),
                               SizedBox(height: 10),
                               Container(
-                                          alignment: Alignment.center,
+                                          alignment: Alignment.centerLeft,
                                           decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius: BorderRadius.circular(20),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.pinkAccent,
-                                                  blurRadius: 6,
-                                                  offset: Offset(0,2),
-                                                )
-                                              ]
+                                            
                                           ),
                                           height: 25,
                                           width: 300,
                                           child: Text(
                                           'Date of Vaccination: ' + _date,
                                           style: TextStyle(
-                                            color: Colors.pink,
+                                            color: Colors.black,
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold
                                           ),
@@ -294,24 +261,18 @@ class _ProfileState extends State<Profile> {
                             
                               SizedBox(height: 10),
                               Container(
-                                      alignment: Alignment.center,
+                                      alignment: Alignment.centerLeft,
                                       decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius: BorderRadius.circular(20),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.pinkAccent,
-                                              blurRadius: 6,
-                                              offset: Offset(0,2),
-                                      )
-                                    ]
+                                        
                                 ),
                                 height: 25,
                                 width: 300,
                                 child: Text(
                                 'Place of Vacination:' + data['Placed_vacined'],
                                 style: TextStyle(
-                                  color: Colors.pink,
+                                  color: Colors.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold
                                 ),
@@ -319,24 +280,18 @@ class _ProfileState extends State<Profile> {
                               ),
                               SizedBox(height: 10),
                               Container(
-                                alignment: Alignment.center,
+                                alignment: Alignment.centerLeft,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(20),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.pinkAccent,
-                                        blurRadius: 6,
-                                        offset: Offset(0,2),
-                                      )
-                                    ]
+                             
                                 ),
                                 height: 25,
                                 width: 300,
                                 child: Text(
                                 'Physician Name:' + data['Physician_name'],
                                 style: TextStyle(
-                                  color: Colors.pink,
+                                  color: Colors.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold
                                 ),
@@ -344,24 +299,18 @@ class _ProfileState extends State<Profile> {
                               ),
                               SizedBox(height: 10),
                               Container(
-                                alignment: Alignment.center,
+                                alignment: Alignment.centerLeft,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(20),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.pinkAccent,
-                                        blurRadius: 6,
-                                        offset: Offset(0,2),
-                                      )
-                                    ]
+                             
                                 ),
                                 height: 25,
                                 width: 300,
                                 child: Text(
                                 'License Number:' + data['License_no'],
                                 style: TextStyle(
-                                  color: Colors.pink,
+                                  color: Colors.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold
                                 ),
@@ -369,24 +318,17 @@ class _ProfileState extends State<Profile> {
                               ),
                               SizedBox(height: 10),
                               Container(
-                                alignment: Alignment.center,
+                                alignment: Alignment.centerLeft,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(20),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.pinkAccent,
-                                        blurRadius: 6,
-                                        offset: Offset(0,2),
-                                      )
-                                    ]
                                 ),
                                 height: 25,
                                 width: 300,
                                 child: Text(
                                 'Date of Last RT-PCR: ' + _rt,
                                 style: TextStyle(
-                                  color: Colors.pink,
+                                  color: Colors.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold
                                 ),

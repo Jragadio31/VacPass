@@ -52,6 +52,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
+  bool obs = true;
 
 
 Widget buildDateVaccined() {
@@ -74,11 +75,11 @@ Widget buildDateVaccined() {
                   ),
                   height: 60,
                   child: TextFormField(
-                    keyboardType: TextInputType.name,
+                    keyboardType: TextInputType.datetime,
                     style: TextStyle(
                       color: Colors.black87,
                     ),
-                    controller: _dateVController,
+                    controller: _dateVController,enableInteractiveSelection: false,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.only(top: 14),
@@ -99,8 +100,8 @@ Widget buildDateVaccined() {
                           lastDate: DateTime.now()
                         ).then((value) =>
                            setState(() {
-                            _dateVacined = value;
-                            _dateVController..text = _dateVacined.toString();
+                             _dateVacined = value;
+                            _dateVController..text = convertDate(value);
                             if(_dateVController.text.isNotEmpty) setState(() {_datevaccinedlabel = 'Date of Vaccination'; });
                             if(_dateVController.text.isEmpty) setState(() {_datevaccinedlabel = ''; });
                           })
@@ -150,24 +151,41 @@ Widget buildlastRTPCR() {
                   Icons.date_range_sharp,
                   color: Colors.purple[300]
                 ),
+                suffixIcon: IconButton(
+                  onPressed:  (){ 
+                    showDatePicker(
+                      context: context, 
+                      initialDate: DateTime.now(), 
+                      firstDate: DateTime(2020), 
+                      lastDate: DateTime.now()
+                    ).then((value) =>
+                        setState(() {
+                          _lastRTPCR = value;
+                        _dateController..text = convertDate(value);
+                        if(_dateController.text.isNotEmpty) setState(() {_lastrtpcrlabel = 'Last RT PCR Date'; });
+                      })
+                    );
+                  },
+                  icon:  Icon(Icons.calendar_today),
+                ),
                 hintText: this._lastrtpcrlabel,
                 hintStyle: TextStyle(
                   color: Colors.black38
                 )
               ),
               onTap: () {
-                  showDatePicker(
-                    context: context, 
-                    initialDate: DateTime.now(), 
-                    firstDate: DateTime(2020), 
-                    lastDate: DateTime.now()
-                  ).then((value) =>
-                      setState(() {
-                      _lastRTPCR = value;
-                      _dateController..text = _lastRTPCR.toString();
-                      if(_dateController.text.isNotEmpty) setState(() {_lastrtpcrlabel = 'Last RT PCR Date'; });
-                    })
-                  );
+                     showDatePicker(
+                          context: context, 
+                          initialDate: DateTime.now(), 
+                          firstDate: DateTime(2020), 
+                          lastDate: DateTime.now()
+                        ).then((value) =>
+                           setState(() {
+                            _dateVController..text = convertDate(value);
+                            if(_dateVController.text.isNotEmpty) setState(() {_lastrtpcrlabel = 'Date of Vaccination'; });
+                            if(_dateVController.text.isEmpty) setState(() {_lastrtpcrlabel = ''; });
+                          })
+                   );
               },
               validator: (String value) {
                 if (value.isEmpty) return 'Date of Last RT-PCR is Required';
@@ -179,8 +197,12 @@ Widget buildlastRTPCR() {
     );
 }
 
+String convertDate(DateTime _datevaccined){
+  return _datevaccined.month.toString() +'/'+ _datevaccined.day.toString() + '/' + _datevaccined.year.toString();
+}
 
 Widget buildconfirmpassword() {
+  
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -200,7 +222,7 @@ Widget buildconfirmpassword() {
           ),
           height: 60,
           child: TextFormField(
-            obscureText: true,
+            obscureText:obs,
             controller: _confirmpassword,
             style: TextStyle(
               color: Colors.black87,
@@ -215,7 +237,11 @@ Widget buildconfirmpassword() {
               hintText: this._confirmpasswordlabel,
               hintStyle: TextStyle(
                 color: Colors.black38
-              )
+              ),
+              suffixIcon: IconButton(
+                onPressed:  (){setState(() {obs = !obs; });},
+                icon: obs ? Icon(Icons.visibility_off) : Icon(Icons.visibility)
+              ),
             ),
              validator: (String value) {
                   if (value.isEmpty) return 'Password is Required';

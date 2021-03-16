@@ -64,11 +64,12 @@ class HistoryView extends State<HistoryPassenger>{
                 ),
               body: ListView(
                 children: snapshot.data.docs.map((DocumentSnapshot document) {
-
-                  return new ListTile(
-                    title: new Text(convertDate(document.data()['Date'])),
-                    subtitle: new Text(convertGeoPointToCoordinate(document.data()['Location'])?.addressLine ?? 'Address'),
-                  );
+                  if(document.data()['Passenger_uid'].toString() == auth.currentUser.uid ){
+                     return new ListTile(
+                      title: new Text(convertDate(document.data()['Date'])),
+                      subtitle: new Text(convertGeoPointToCoordinate(document.data()['Location'])?.addressLine ?? 'Address'),
+                    );
+                  } 
                 }).toList(),
               ),
             ),

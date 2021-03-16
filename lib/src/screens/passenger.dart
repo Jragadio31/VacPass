@@ -11,7 +11,7 @@ class Passenger extends StatefulWidget {
 }
 
 class _PassScreen extends State<Passenger> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 0; 
 
   List<Widget> _widgetOptions = <Widget>[
     

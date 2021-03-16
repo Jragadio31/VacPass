@@ -7,6 +7,7 @@ import 'historyverifier.dart';
 import 'profileverifier.dart';
 
 class VerifierNav extends StatefulWidget {
+
   @override
   _VerifierScreen createState() => _VerifierScreen();
 }
@@ -17,7 +18,7 @@ class _VerifierScreen extends State<VerifierNav> {
 
 
   List<Widget> _widgetOptions = <Widget>[
-    Verifier(),
+    Verifier(name: 'Tristan',),
     History(),
     Profile(),
   ];

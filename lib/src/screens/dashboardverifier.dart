@@ -11,6 +11,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 
 class Verifier extends StatefulWidget{
+  final String name;
+  Verifier({Key key, @required this.name}) : super(key: key);
   @override
   VerifierHomeScreen createState() => VerifierHomeScreen();
 }

@@ -6,13 +6,13 @@ import './FirebaseService.dart';
 import '../route.dart';
 
 
-class LoginScreen extends StatefulWidget {
+class ForgetPasswordScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _ForgetPasswordScreenState createState() => _ForgetPasswordScreenState();
 }
 
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   final _formKey = GlobalKey<FormState>();
   
@@ -23,24 +23,9 @@ class _LoginScreenState extends State<LoginScreen> {
  final TextInputType keyPass = TextInputType.text;
  TextEditingController _password = TextEditingController();
 
-Widget buildForgetPassword(){
-  return Container(
-    alignment: Alignment.centerRight,
-    child: FlatButton(
-      onPressed: () => Navigator.of(context).pushNamed(AppRoutes.authForgetPassword),
-      padding: EdgeInsets.only(right: 0),
-      child: Text(
-        'Forget Password?',
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold
-        )
-      )
-      )
-  );
-}
 
-Widget buildLoginBtn(){
+
+Widget buildResetPasswordBtn(){
   return Container(
     padding: EdgeInsets.symmetric( vertical: 25),
     width: double.infinity,
@@ -52,7 +37,7 @@ Widget buildLoginBtn(){
         ),
         color: Colors.white,
         child: Text(
-          'Login',
+          'Reset Password',
           style: TextStyle(
             color: Colors.pinkAccent,
             fontSize: 18,
@@ -61,43 +46,39 @@ Widget buildLoginBtn(){
         ),
         onPressed: (){
           if (_formKey.currentState.validate()) {
-            DatabaseService().signIn(context,_email.text,_password.text);
+            DatabaseService().resetPassword(context,_email.text);
           }
         },
     )
   );
 }
 
-Widget buildSignUpBtn(){
-  return GestureDetector(
-    onTap: () {
-        Navigator.of(context).pushNamed(AppRoutes.authRegister);
-    },
-    child: RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(
-            text: 'Don\'t have an account yet? ',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w500
-            ),
+Widget buildCancelBtn(){
+  return Container(
+    width: double.infinity,
+    child: 
+      RaisedButton(
+        padding: EdgeInsets.all(12.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15)
+        ),
+        color: Colors.white,
+        child: Text(
+          'Cancel',
+          style: TextStyle(
+            color: Colors.pinkAccent,
+            fontSize: 18,
+            fontWeight: FontWeight.bold
           ),
-          TextSpan(
-              text: 'Sign Up',
-              style: TextStyle(
-                decoration: TextDecoration.underline,
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold
-              )
-            )
-        ]
-      ),
+        ),
+        onPressed: (){
+          Navigator.of(context).pushNamed(AppRoutes.authLogin);
+        },
     )
   );
 }
+
+
 
   @override
   Widget build(BuildContext context){
@@ -149,11 +130,8 @@ Widget buildSignUpBtn(){
                         children: <Widget> [
                           SizedBox(height: 50),
                           CustomTextField(this._email, this.keyEmail, 'Email Address', 'email', false),
-                          SizedBox(height: 20),
-                          CustomTextField(this._password, this.keyPass, 'Password', 'password', true),
-                          buildForgetPassword(),
-                          buildLoginBtn(),
-                          buildSignUpBtn(),  
+                          buildResetPasswordBtn(),
+                          buildCancelBtn(),
                       ],
                       )
                    )
