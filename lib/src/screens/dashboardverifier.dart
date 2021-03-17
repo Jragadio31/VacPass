@@ -1,12 +1,15 @@
 
 
 import 'dart:async';
-
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:minimize_app/minimize_app.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'CustomTextField.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 
@@ -20,16 +23,137 @@ class VerifierHomeScreen extends State<Verifier> {
  final auth = FirebaseAuth.instance;
  final db = FirebaseFirestore.instance;
  Map data;
+ final TextEditingController brandNumber = new TextEditingController();
+ final TextInputType keyType = TextInputType.number;
 
 String uid;
  Position pos;
 
+Future<void> searchVaccineNumber()async{
+
+  showDialog(context: context, builder: (context){
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
+      child: Container(
+        alignment: Alignment.center,
+        width: MediaQuery.of(context).size.width / 1.5,
+        height: MediaQuery.of(context).size.height / 3,
+        child: Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text('Enter Vaccine number',style: TextStyle(color: Colors.pinkAccent,fontSize: 24)),
+                CustomTextField(brandNumber, keyType, 'Brand number', 'brandnumber', false),
+                RaisedButton(
+                  color: Colors.pinkAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                  ),
+                  onPressed: (){
+                    searchVacc();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('SEARCH',style: TextStyle(color: Colors.white),),
+                )
+              ],
+            ),
+          ),
+        ),
+    );
+  });
+}
+Future<void> searchVacc() async {
+  try{
+    await db.
+    collection('users').
+    where('Brand_number',isEqualTo: brandNumber.text).
+    get().
+    then((doc) =>  {
+      doc.docs.map((DocumentSnapshot document) => {
+        print(document.data()['Brand_name']),
+        showDialog(context: context, builder: (context){
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+            ),
+            child: 
+              Container(
+                width: MediaQuery.of(context).size.width / 1.5,
+                height: MediaQuery.of(context).size.height / 3,
+                alignment: Alignment.center,
+                child:Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Manufacturer :',style: TextStyle(color: Colors.grey,fontSize: 18),),
+                              Text(document.data()['M_Brand'],style: TextStyle(color: Colors.grey,fontSize: 20),),
+                            ]
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Brand Name :',style: TextStyle(color: Colors.grey,fontSize: 18),),
+                              Text(document.data()['Brand_name'],style: TextStyle(color: Colors.grey,fontSize: 20),),
+                            ]
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Brand no. :',style: TextStyle(color: Colors.grey,fontSize: 18),),
+                              Text(document.data()['Brand_number'],style: TextStyle(color: Colors.grey,fontSize: 20),),
+                            ]
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Physician Name :',style: TextStyle(color: Colors.grey,fontSize: 18),),
+                              Text(document.data()['Physician_name'],style: TextStyle(color: Colors.grey,fontSize: 20),),
+                            ]
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('License no. :',style: TextStyle(color: Colors.grey,fontSize: 18),),
+                              Text(document.data()['License_no'],style: TextStyle(color: Colors.grey,fontSize: 20),),
+                            ]
+                          ),
+                          document.data()['Status'] == 'true' ? confirmedPass() : rejectPass(),
+                          RaisedButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                            ),
+                            onPressed: (){
+                                Navigator.of(context).pop(); 
+                            },
+                            color: Colors.green[700],
+                            child: Text('Close'),
+                          )
+                        ],
+                      ),
+                    ),
+              ),
+          );
+        }),
+      }),
+      
+    }).catchError((onError) => print('ID does not exist'));
+  } on Exception{
+    print('ID not found');
+  }
+}
 Future<void> scan() async{
+     await checkPermission();
   try{
       String barcode = await scanner.scan();
       pos = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
       GeoPoint point = GeoPoint(pos.latitude,pos.longitude);
 
+      
       setState(() {
         var code = barcode.split('.');
         uid = code[0];
@@ -117,6 +241,27 @@ Future<void> scan() async{
   }
 }
 
+  Future<void> checkPermission() async{
+    if(await Permission.camera.status.isDenied){
+      if(await Permission.camera.request().isDenied){
+        exitApp();
+      }
+    }
+    if(await Permission.location.status.isDenied){
+      if(await Permission.location.request().isDenied){
+        exitApp();
+      }
+    }
+    if(await Permission.location.serviceStatus.isDisabled){
+      return print('Please connect to internet');
+    }
+  }
+
+  void exitApp(){
+    if(Platform.isAndroid) SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    if(Platform.isIOS) MinimizeApp.minimizeApp();
+  }
+
   Widget confirmedPass(){
     return 
       Row(
@@ -156,74 +301,89 @@ Future<void> scan() async{
           }
 
           return Container(
-            child: !snapshot.hasData? animate() : Scaffold(
-              appBar: 
-                AppBar(
-                  title: Text('Dashboard', style: TextStyle(color: Colors.pinkAccent,fontSize: 28),), 
-                  automaticallyImplyLeading: false, 
-                  backgroundColor: Colors.white,
-                  elevation: 0,
-                ),
-              body: LayoutBuilder(
-                builder: (context, constrainst){
-                  return Container(
-                    alignment: Alignment.topCenter,
-                    height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(color: Colors.white),
-                    child: ListView(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(height:150),
-                            CircleAvatar(
-                              backgroundImage: AssetImage('Images/dasha.png'),
-                              radius: 70,
-                            ),
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(height:10),
-                            Text(data['F_name'] +' '+ data['L_name'], style: TextStyle(fontSize: 22),),
-                            FlatButton(onPressed: (){},
-                             child: Text('View Profile',style: TextStyle(color: Colors.grey,),)
-                            ),
-                          ],
-                        ),
-                        Center(
-                          child: Column(
+            child: !snapshot.hasData? animate() : SafeArea(
+              child: Scaffold(
+                appBar: 
+                  AppBar(
+                    title: Text('Dashboard', style: TextStyle(color: Colors.pinkAccent,fontSize: 28),), 
+                    automaticallyImplyLeading: false, 
+                    backgroundColor: Colors.white,
+                    elevation: 0,
+                  ),
+                body: LayoutBuilder(
+                  builder: (context, constrainst){
+                    return Container(
+                      alignment: Alignment.topCenter,
+                      decoration: BoxDecoration(color: Colors.white),
+                      child: ListView(
+                        children: [
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(height:50),
-                              Material(
-                                color: Colors.transparent,
-                                child:  Image.asset('Images/scan.png', width:250, height: 250),
-                              ),
-                              SizedBox(height:20),
-                              SizedBox(
-                                width:240,
-                                height:40,
-                                child: 
-                                  RaisedButton(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                                    ),
-                                    color: Colors.pinkAccent,
-                                    onPressed: scan,
-                                    child: Text('SCAN QR CODE',style: TextStyle(color: Colors.white),),
-                                  ),
+                              SizedBox(height: MediaQuery.of(context).size.height/4),
+                              CircleAvatar(
+                                backgroundImage: AssetImage('Images/dasha.png'),
+                                radius: 70,
                               ),
                             ],
                           ),
-                        ),
-                      ]
-                    ),
-                  ); 
-                },  
-              )
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                              Text(data['F_name'] +' '+ data['L_name'], style: TextStyle(fontSize: 22),),
+                              FlatButton(onPressed: (){},
+                              child: Text('View Profile',style: TextStyle(color: Colors.grey,),)
+                              ),
+                            ],
+                          ),
+                          Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(height:MediaQuery.of(context).size.height * 0.01),
+                                Material(
+                                  color: Colors.transparent,
+                                  child:  Image.asset('Images/scan.png', width:250, height: MediaQuery.of(context).size.height/4),
+                                ),
+                                SizedBox(height:MediaQuery.of(context).size.height * 0.01),
+                                SizedBox(
+                                  width:MediaQuery.of(context).size.width/1.5,
+                                  height:40,
+                                  child: 
+                                    RaisedButton(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                                      ),
+                                      color: Colors.pinkAccent,
+                                      onPressed: scan,
+                                      child: Text('SCAN QR CODE',style: TextStyle(color: Colors.white),),
+                                    ),
+                                ),
+                                SizedBox(height:MediaQuery.of(context).size.height * 0.02),
+                                SizedBox(
+                                  width:MediaQuery.of(context).size.width/1.5,
+                                  height:40,
+                                  child: 
+                                    RaisedButton(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                                      ),
+                                      color: Colors.pinkAccent,
+                                      onPressed: searchVaccineNumber,
+                                      child: Text('SEARCH VACCINE NO.',style: TextStyle(color: Colors.white),),
+                                    ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]
+                      ),
+                    ); 
+                  },  
+                )
+              ),
             ),
           );
          },
@@ -245,81 +405,3 @@ Widget animate(){
     );
   }
 }
-
-                  //             SizedBox(height: 10),
-                  //              Container(
-                  //             alignment: Alignment.center,
-                  //             decoration: BoxDecoration(
-                  //                 color: Colors.white,
-                  //                 borderRadius: BorderRadius.circular(20),
-                  //                 boxShadow: [
-                  //                   BoxShadow(
-                  //                     color: Colors.black26,
-                  //                     blurRadius: 6,
-                  //                     offset: Offset(0,2),
-                  //                   )
-                  //                 ]
-                  //             ),
-                  //             height: 25,
-                  //             width: 300,
-                  //             child: Text(
-                  //             'Name: ' + data['F_name'] + ' ' + data['L_name'],
-                  //             style: TextStyle(
-                  //               color: Colors.black,
-                  //               fontSize: 16,
-                  //               fontWeight: FontWeight.bold
-                  //             ),
-                  //            ),
-                  //           ),
-                  //           SizedBox(height: 10),
-                  //           Container(
-                  //             alignment: Alignment.center,
-                  //             decoration: BoxDecoration(
-                  //                 color: Colors.white,
-                  //                 borderRadius: BorderRadius.circular(20),
-                  //                 boxShadow: [
-                  //                   BoxShadow(
-                  //                     color: Colors.black26,
-                  //                     blurRadius: 6,
-                  //                     offset: Offset(0,2),
-                  //                   )
-                  //                 ]
-                  //             ),
-                  //             height: 25,
-                  //             width: 300,
-                  //             child: Text(
-                  //             'role: ' + data['role'],
-                  //             style: TextStyle(
-                  //               color: Colors.black,
-                  //               fontSize: 16,
-                  //               fontWeight: FontWeight.bold
-                  //             ),
-                  //            ),
-                  //           ),
-                  //           SizedBox(height: 50),
-                  //           Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //   children: [
-                  //     FloatingActionButton(
-                  //         onPressed: () => scan(),
-                  //         child: Icon(
-                  //           Icons.camera,
-                  //           color: Colors.pink,
-                  //         ),
-                  //         backgroundColor: Colors.white,
-                  //   ),
-                  //   FloatingActionButton(
-                  //       onPressed: (){
-                        
-                  //           auth.signOut();
-                  //           Navigator.of(context).pop(AppRoutes.authVerifier);
-                  //       },
-                  //         child: Icon(
-                  //           Icons.cancel,
-                  //           color: Colors.pink,
-                  //         ),
-                  //         backgroundColor: Colors.white,
-                  //   ),
-                  //   ],
-                  // ),
-                      

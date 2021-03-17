@@ -22,6 +22,7 @@ class CustomTextField extends StatelessWidget{
     if(action == 'placevaccined') return Icon(Icons.add_location, color: Colors.purple[300]);
     if(action == 'licensenumber') return Icon(Icons.credit_card, color: Colors.purple[300]);
     if(action == 'manufacturer') return Icon(Icons.business, color: Colors.purple[300]);
+    return null;
   }
 
   @override

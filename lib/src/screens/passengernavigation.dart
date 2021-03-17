@@ -1,9 +1,12 @@
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:vacpass_app/src/screens/userclass.dart';
 import 'dashboardpassenger.dart';
-import 'profile.dart';
+import 'profilepassenger.dart';
 import 'historypassenger.dart';
-// import './home.dart';
 
 class Passenger extends StatefulWidget {
   @override
@@ -14,7 +17,6 @@ class _PassScreen extends State<Passenger> {
   int _selectedIndex = 0;
 
   List<Widget> _widgetOptions = <Widget>[
-    
     Dashboard(),
     HistoryPassenger(),
     Profile(),

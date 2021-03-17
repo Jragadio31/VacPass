@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'screens/login.dart';
 import 'screens/register.dart';
-import 'screens/passenger.dart';
+import 'screens/passengernavigation.dart';
 import 'screens/verifiernavigation.dart';
 
 class AppRoutes{
@@ -9,7 +9,6 @@ class AppRoutes{
 
   static const String authLogin = '/auth-login';
   static const String authRegister = '/auth-Register';
-  static const String authHome = '/auth-Home';
   static const String authVerifier = '/auth-Verifier';
   static const String authPassenger = '/auth-Passenger';
 

@@ -4,6 +4,7 @@ import 'package:vacpass_app/src/route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vacpass_app/src/screens/CustomTextField.dart';
+import './userclass.dart';
 import '../route.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -257,25 +258,46 @@ Widget buildSignInBtn(){
             try{
               auth.createUserWithEmailAndPassword(email: _email.text,password: _password.text).then((_){
 
-                users
-                .doc(auth.currentUser.uid)
-                .set({
-                    'role': 'passenger',
-                    'L_name': _lastName.text,
-                    'F_name': _firstName.text,
-                    'Address': _address.text,
-                    'M_Brand': _mbrand.text,
-                    'Brand_name': _brandName.text,
-                    'Brand_number': _brandNumber.text,
-                    'Date_of_Vaccination': _dateVacined,
-                    'Placed_vacined': _placeVacined.text,
-                    'Physician_name': _physicianName.text,
-                    'License_no': _licenseNumber.text,
-                    'RT_PCR_Date': _lastRTPCR,
-                  }).then((value) =>
-                      Navigator.of(context).pushNamed(AppRoutes.authHome)
-                      
+                UserData user = new 
+                UserData( 
+                  auth.currentUser.uid, 
+                  _firstName.text, 
+                  _lastName.text, 
+                  _address.text, 
+                  _mbrand.text, 
+                  _brandName.text, 
+                  int.parse(_brandNumber.text), 
+                  _dateVacined, 
+                  _placeVacined.text, 
+                  _physicianName.text, 
+                  _lastRTPCR, 
+                  _licenseNumber.text
                   );
+                  
+                  if(user.updateInformationData()) return Navigator.of(context).pushNamed(AppRoutes.authPassenger);
+                  showDialog(context: context, builder: (context){
+                      return Dialog(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width / 1.5,
+                          height: MediaQuery.of(context).size.height / 3,
+                          child:  Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('User data has not been save.',style: TextStyle(color: Colors.red,fontSize: 20)),
+                                  Text('Please insert correct data.',style: TextStyle(color: Colors.red,fontSize: 20)),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      ElevatedButton(onPressed: (){Navigator.of(context).pop();}, child: Text('Okay')),
+                                    ],
+                                  )
+                                ],
+                              )
+                            ),
+                        ),
+                    );
+                });
               });
             } on FirebaseAuthException catch(e){
               print(e.message);

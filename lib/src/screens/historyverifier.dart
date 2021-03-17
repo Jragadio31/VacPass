@@ -1,12 +1,14 @@
 
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoder/geocoder.dart';
-
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+// import 'package:location/location.dart';
 class History extends StatefulWidget{
   @override 
   HistoryView createState() => HistoryView();
@@ -18,9 +20,10 @@ class HistoryView extends State<History>{
  final auth = FirebaseAuth.instance;
  CollectionReference users = FirebaseFirestore.instance.collection('VacpassHistory');
   
+
   List<Address> addr = [];
   Address _addr;
-
+  String addr1 = "";
   String convertDate(Timestamp time){
     Timestamp _dateofVaccination = time;
     DateTime _datevaccined = _dateofVaccination.toDate();
@@ -32,11 +35,12 @@ class HistoryView extends State<History>{
     Coordinates coordinates = new Coordinates(point.latitude, point.longitude);
     coordinatesToAddress(coordinates).then((value) => { address = value });
     return address;
+    
   }
 
   Future<Address> coordinatesToAddress(Coordinates coordinates) async{
     var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    return addresses.first;
+      addr1 = addresses.first.addressLine;
   }
 
   @override
@@ -65,9 +69,9 @@ class HistoryView extends State<History>{
               body: ListView(
                 children: snapshot.data.docs.map((DocumentSnapshot document) {
 
-                  return new ListTile(
+                  return new ListTile( 
                     title: new Text(convertDate(document.data()['Date'])),
-                    subtitle: new Text(convertGeoPointToCoordinate(document.data()['Location'])?.addressLine ?? 'Address'),
+                    subtitle: new Text(convertGeoPointToCoordinate(document.data()['Location']) ?? addr1),
                   );
                 }).toList(),
               ),
@@ -79,6 +83,7 @@ class HistoryView extends State<History>{
 
   
 }
+ 
 
 Widget animate(){
   @override 
@@ -89,7 +94,10 @@ Widget animate(){
       body: SpinKitCircle(
         color: Colors.pinkAccent,
         size: 50,
+        
       ),
     );
   }
+   
 }
+
