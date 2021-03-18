@@ -6,39 +6,48 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:intl/intl.dart';
+// import 'package:intl/intl_browser.dart';
+import 'package:timeago/timeago.dart';
 
-class History extends StatefulWidget{
+class HistoryPassenger extends StatefulWidget{
   @override 
   HistoryView createState() => HistoryView();
 }
 
-class HistoryView extends State<History>{
+class HistoryView extends State<HistoryPassenger>{
   Map data;
  final db = FirebaseFirestore.instance;
  final auth = FirebaseAuth.instance;
  CollectionReference users = FirebaseFirestore.instance.collection('VacpassHistory');
-  
-  List<Address> addr = [];
-  Address _addr;
 
   String convertDate(Timestamp time){
     Timestamp _dateofVaccination = time;
     DateTime _datevaccined = _dateofVaccination.toDate();
-    return _datevaccined.month.toString() +'/'+ _datevaccined.day.toString() + '/' + _datevaccined.year.toString();
+    
+    String exacttime = DateFormat.jm().format(_datevaccined);
+    return exactMonth(_datevaccined.month) +' '+ _datevaccined.day.toString() + ' ' + _datevaccined.year.toString()+' '+exacttime;
   }
+ 
+ String exactMonth(int month){
+   String monthname;
 
-  Address convertGeoPointToCoordinate(GeoPoint point) {
-    Address address ;
-    Coordinates coordinates = new Coordinates(point.latitude, point.longitude);
-    coordinatesToAddress(coordinates).then((value) => { address = value });
-    return address;
-  }
-
-  Future<Address> coordinatesToAddress(Coordinates coordinates) async{
-    var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    return addresses.first;
-  }
-
+   switch(month){
+     case 1: monthname = 'January'; break;
+     case 2: monthname = 'February'; break;
+     case 3: monthname = 'March'; break;
+     case 4: monthname = 'April'; break;
+     case 5: monthname = 'May'; break;
+     case 6: monthname = 'June'; break;
+     case 7: monthname = 'July'; break;
+     case 8: monthname = 'August'; break;
+     case 9: monthname = 'September'; break;
+     case 10: monthname = 'October'; break;
+     case 11: monthname = 'November'; break;
+     case 12: monthname = 'December'; break;
+   }
+   return monthname;
+ }
   @override
   Widget build(BuildContext context) {
 
@@ -46,16 +55,14 @@ class HistoryView extends State<History>{
       stream: users.snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          
           return Text('Something went wrong');
-          
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-
           return Text("");
         }
         
         return  Container(
+          height: MediaQuery.of(context).size.height,
           child: !snapshot.hasData? animate() :
             Scaffold(
               appBar: 
@@ -65,15 +72,14 @@ class HistoryView extends State<History>{
                   backgroundColor: Colors.white,
                   elevation: 0,
                 ),
-              body: ListView(
-                children: snapshot.data.docs.map((DocumentSnapshot document) {             
-                 if(document.data()['Verifier_uid'].toString() == auth.currentUser.uid){
-                     return new ListTile(
+              body: Column(
+                children: snapshot.data.docs.map((DocumentSnapshot document) {
+                  return Card(
+                    child: new ListTile(
                       title: new Text(convertDate(document.data()['Date'])),
-                      subtitle: new Text(convertGeoPointToCoordinate(document.data()['Location'])?.addressLine ?? 'Address'),
-                    );
-                } 
-                  
+                      subtitle: new Text(document.data()['Address']),
+                    ),
+                  );
                 }).toList(),
               ),
             ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'screens/login.dart';
 import 'screens/register.dart';
-import 'screens/passenger.dart';
-import 'screens/verifiernavigation.dart';
+import 'screens/Passenger/passengernavigation.dart';
+import 'screens/Verifier/verifiernavigation.dart';
 import 'screens/ForgetPassword.dart';
 
 class AppRoutes{

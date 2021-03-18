@@ -4,23 +4,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dashboardverifier.dart';
 import 'historyverifier.dart';
-import 'profileverifier.dart';
+import 'verifierSettings.dart';
 
 class VerifierNav extends StatefulWidget {
-
   @override
   _VerifierScreen createState() => _VerifierScreen();
 }
 
 class _VerifierScreen extends State<VerifierNav> {
-  int _selectedIndex = 0;
+ int _selectedIndex = 0;
  bool status = false;
 
 
   List<Widget> _widgetOptions = <Widget>[
-    Verifier(name: 'Tristan',),
+    Verifier(),
     History(),
-    Profile(),
+    Settings(),
   ];
 
   
@@ -43,8 +42,8 @@ class _VerifierScreen extends State<VerifierNav> {
               backgroundColor: Colors.pinkAccent,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Verifier Profile',
+              icon: Icon(Icons.settings),
+              label: 'Settings',
               backgroundColor: Colors.pinkAccent,
             ),
           ],

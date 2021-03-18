@@ -1,4 +1,6 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vacpass_app/src/screens/CustomTextField.dart';
@@ -61,7 +63,23 @@ Widget buildLoginBtn(){
         ),
         onPressed: (){
           if (_formKey.currentState.validate()) {
-            DatabaseService().signIn(context,_email.text,_password.text);
+           DatabaseService().signIn(context,_email.text,_password.text);
+
+              // showDialog(context: context, builder: (context){
+              //         return Dialog(
+              //           child: Container(
+              //             width: MediaQuery.of(context).size.width / 1.5,
+              //             height: MediaQuery.of(context).size.height / 3,
+              //             child:  Center(
+              //                 child: Column(
+              //                   mainAxisAlignment: MainAxisAlignment.center,
+              //                   children: <Widget>[
+              //                       Text(err)
+              //                   ],),
+              //               ),
+              //           ),
+              //       );
+              //   });
           }
         },
     )
@@ -99,6 +117,8 @@ Widget buildSignUpBtn(){
   );
 }
 
+
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -135,7 +155,7 @@ Widget buildSignUpBtn(){
                       color: Colors.transparent,
                       child:  Image.asset('Images/vacpass-logo2.png', width:120, height: 120),
                     ),
-                    Text('VaxiPass',
+                    Text('Vaxipass',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 40,
