@@ -30,12 +30,8 @@ Widget buildResetPasswordBtn(){
     padding: EdgeInsets.symmetric( vertical: 25),
     width: double.infinity,
     child: 
-      RaisedButton(
-        padding: EdgeInsets.all(12.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30)
-        ),
-        color: Colors.white,
+      ElevatedButton(
+        
         child: Text(
           'Reset Password',
           style: TextStyle(
@@ -57,12 +53,13 @@ Widget buildCancelBtn(){
   return Container(
     width: double.infinity,
     child: 
-      RaisedButton(
-        padding: EdgeInsets.all(12.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15)
-        ),
-        color: Colors.white,
+      ElevatedButton(
+         style: ElevatedButton.styleFrom(
+            primary: Colors.pinkAccent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+            ),
+          ),
         child: Text(
           'Cancel',
           style: TextStyle(

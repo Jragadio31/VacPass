@@ -362,13 +362,16 @@ Future<void> scan() async{
                                   width:MediaQuery.of(context).size.width/1.5,
                                   height:40,
                                   child: 
-                                    RaisedButton(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                                      ),
-                                      color: Colors.pinkAccent,
-                                      onPressed: scan,
-                                      child: Text('SCAN QR CODE',style: TextStyle(color: Colors.white),),
+                                   ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          // background color
+                                          primary: Colors.pinkAccent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                                          ),
+                                        ),
+                                      child: Text('Scan a code',style: TextStyle(color: Colors.white),),
+                                      onPressed: scan, 
                                     ),
                                 ),
                                 SizedBox(height:MediaQuery.of(context).size.height * 0.02),
@@ -376,11 +379,14 @@ Future<void> scan() async{
                                   width:MediaQuery.of(context).size.width/1.5,
                                   height:40,
                                   child: 
-                                    RaisedButton(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                                      ),
-                                      color: Colors.pinkAccent,
+                                    ElevatedButton(
+                                       style: ElevatedButton.styleFrom(
+                                          // background color
+                                          primary: Colors.pinkAccent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                                          ),
+                                        ),
                                       onPressed: searchVaccineNumber,
                                       child: Text('SEARCH VACCINE NO.',style: TextStyle(color: Colors.white),),
                                     ),

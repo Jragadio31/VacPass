@@ -84,8 +84,6 @@ class HistoryView extends State<History>{
       },
     );
   }
-
-  
 }
  
 

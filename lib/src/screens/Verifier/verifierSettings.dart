@@ -153,6 +153,46 @@ class SettingsView extends State<Settings>{
    GestureDetector buildAccountOptionRow(BuildContext context, String title) {
     return GestureDetector(
       onTap: () {
+        if(title == "About us"){
+           showDialog(context: context, builder: (context){
+                return Dialog(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height/2,
+                    child:  Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                                  width: double.infinity,
+                                  child: Container(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: Text(
+                                      "Uru Company",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 40,
+                                      ),
+                                    ),
+                                  ),
+                            ),
+                            SizedBox(
+                                  width: double.infinity,
+                                  child: Container(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: Text(
+                                      "URU Co. is a dev company composed of five passionate Zamboangeño developers whose vision for modernizing problem solution drives result. URU Co. is based in Asia’s Latin City, Zamboanga, Philippines.",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                            ),
+                        
+                          ],),
+                      ),
+                  ),
+              );
+          });
+        }
 
       },
       child: Padding(
