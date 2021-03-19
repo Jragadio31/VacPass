@@ -1,13 +1,9 @@
 
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 // import 'package:location/location.dart';
 class History extends StatefulWidget{
@@ -94,18 +90,10 @@ class HistoryView extends State<History>{
  
 
 Widget animate(){
-  print('end');
-  //  Timer(Duration(seconds: 2),()=> 'print end');
-  @override 
-  Widget build(BuildContext context){
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SpinKitCircle(
+  return SpinKitCircle(
         color: Colors.pinkAccent,
         size: 50,
-      ),
-    );
+      );
   }
-   
-}
+
 

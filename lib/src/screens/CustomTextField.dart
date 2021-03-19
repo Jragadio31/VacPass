@@ -14,7 +14,6 @@ class CustomTextField extends StatefulWidget{
   CustomInputField createState()=> CustomInputField();
 }
 class CustomInputField extends State<CustomTextField>{
-  
   Icon iconStyle(){
     if(widget.action == 'email') return Icon(Icons.email, color: Colors.purple[300]);
     if(widget.action == 'password') return Icon(Icons.lock, color: Colors.purple[300]);

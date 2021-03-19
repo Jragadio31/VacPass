@@ -1,13 +1,11 @@
 
 
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:carousel_pro/carousel_pro.dart';
 
-
-import '../../route.dart';
 
 
 
@@ -15,13 +13,14 @@ import '../../route.dart';
 class Settings extends StatefulWidget{
   @override 
   SettingsView createState() => SettingsView();
+ 
 }
 
 class SettingsView extends State<Settings>{
  Map data;
  final db = FirebaseFirestore.instance;
  final auth = FirebaseAuth.instance;
-
+ 
   @override 
   Widget build(BuildContext context){
     return Scaffold(
@@ -39,12 +38,38 @@ class SettingsView extends State<Settings>{
               height: MediaQuery.of(context).size.height,
               child: ListView(
                     children: [
-                    SizedBox(
-                      
-                      height: 200,
-                      width: MediaQuery.of(context).size.width, 
-                      child:  Image.asset('Images/ads.png'),
-                      
+                     SizedBox(
+                      height: 200.0,
+                      width: double.infinity,
+                      child: Carousel(
+                        dotSize: 4.0,
+                        dotSpacing: 15.0,
+                        dotBgColor: Colors.transparent,
+                        indicatorBgPadding: 5.0,
+                        dotColor: Colors.pink,
+                        dotVerticalPadding: 5.0,
+                        dotPosition: DotPosition.bottomRight,
+                        images: [
+                           InkWell(
+                            onTap: (){
+                              
+                            },
+                            child: Image.asset('Images/ads.png', fit: BoxFit.cover)
+                           ),
+                            InkWell(
+                            onTap: (){
+                              
+                            },
+                            child: Image.asset('Images/download.jpg', fit: BoxFit.cover)
+                           ),
+                           InkWell(
+                            onTap: (){
+                              
+                            },
+                            child: Image.asset('Images/vacine.jpg', fit: BoxFit.cover)
+                           )
+                        ],
+                      )
                     ),
                     SizedBox(
                         height: 40,
@@ -96,28 +121,28 @@ class SettingsView extends State<Settings>{
                       SizedBox(
                         height: 100,
                       ),
-                      Center(
-                        child: OutlineButton(
-                          padding: EdgeInsets.symmetric(horizontal: 40),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          onPressed: () {
-                          
-                                auth.signOut();
-                                Navigator.of(context).pop(AppRoutes.authLogin);
-                 
-                          },
-                          child: Text("SIGN OUT",
-                              
-                              style: TextStyle(
-                                  
-                                  fontSize: 16,
-                                   letterSpacing: 2.2, 
-                                   color: Colors.black
-                              )
-                          ),
-                        ),
-                      )
+                       Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                    SizedBox(
+                                    width:  MediaQuery.of(context).size.width/1.5,
+                                    height: 40,
+                                    child: 
+                                    RaisedButton(
+                                      color: Colors.pinkAccent,
+                                      onPressed: (){
+                                        
+                                        auth.signOut();
+                                        Navigator.of(context).pop();
+                                        
+                                      },
+                                      child: Text('Sign out', style: TextStyle(color: Colors.white),),
+                                    ),
+                                  )
+                              ]
+                            )
+                        )
                     ],
               ),
               ),

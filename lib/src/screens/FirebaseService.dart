@@ -15,13 +15,13 @@ class DatabaseService {
   BuildContext context;
 
 
-  void signIn(BuildContext context, _email, _password){
+  void signIn(BuildContext context, _email, _password, TextEditingController email_Controller, TextEditingController password_Controller){
     this.context = context;
-    bool status = true;
+    // bool status = true;
 
     try{
       auth.signInWithEmailAndPassword(email: _email, password: _password)
-      .then((_) => {
+      .then((_) => { email_Controller.clear(), password_Controller.clear(),
           FirebaseFirestore
           .instance
           .collection('users')
