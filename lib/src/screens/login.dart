@@ -122,9 +122,9 @@ Widget buildSignUpBtn(){
                       end: Alignment.bottomCenter,
                       colors: [
                         Colors.pinkAccent,
-                        Colors.pink,
-                        Colors.purple[300],
-                        Colors.purpleAccent,
+                        Colors.pinkAccent,
+                        Colors.pinkAccent,
+                        Colors.pinkAccent,
                       ]
                     )
                   ),
@@ -141,7 +141,7 @@ Widget buildSignUpBtn(){
                         color: Colors.transparent,
                         child:  Image.asset('Images/vacpass-logo2.png', width:120, height: 120),
                       ),
-                      Text('VaxPass',
+                      Text('Vaxipass',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 40,

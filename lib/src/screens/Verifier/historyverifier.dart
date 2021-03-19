@@ -1,13 +1,9 @@
 
-import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 // import 'package:location/location.dart';
@@ -78,14 +74,16 @@ class HistoryView extends State<History>{
                 ),
               body: ListView(
                 children: snapshot.data.docs.map((DocumentSnapshot document) {
-                  return Card(
-                    color: Colors.pinkAccent.shade200,
-                    child:
-                      new ListTile( 
+                  if(document.data()['Verifier_uid'] == auth.currentUser.uid)
+                    return Card(
+                      color: Colors.pinkAccent.shade200,
+                      child: new ListTile(
                         title: new Text(convertDate(document.data()['Date']),style: GoogleFonts.poppins(textStyle: TextStyle(color: Colors.white,fontSize: 16),)),
-                        subtitle: new Text( document.data()['Address'],style: GoogleFonts.poppins(textStyle: TextStyle(color: Colors.grey[300],fontSize: 14),)),
+                        subtitle: new Text(document.data()['Address'],style: GoogleFonts.poppins(textStyle: TextStyle(color: Colors.grey[300],fontSize: 14),)),
                       ),
-                  );
+                    );
+                  else
+                    return Container();
                 }).toList(),
               ),
             ),
@@ -99,18 +97,6 @@ class HistoryView extends State<History>{
  
 
 Widget animate(){
-  print('end');
-  //  Timer(Duration(seconds: 2),()=> 'print end');
-  @override 
-  Widget build(BuildContext context){
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SpinKitCircle(
-        color: Colors.pinkAccent,
-        size: 50,
-      ),
-    );
-  }
-   
+  return SpinKitCircle( color: Colors.pinkAccent, size: 50,);
 }
 

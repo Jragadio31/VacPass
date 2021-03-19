@@ -73,13 +73,16 @@ class HistoryView extends State<HistoryPassenger>{
                 ),
               body: Column(
                 children: snapshot.data.docs.map((DocumentSnapshot document) {
-                  return Card(
-                    color: Colors.pinkAccent.shade200,
-                    child: new ListTile(
-                      title: new Text(convertDate(document.data()['Date']),style: GoogleFonts.poppins(textStyle: TextStyle(color: Colors.white,fontSize: 16),)),
-                      subtitle: new Text(document.data()['Address'],style: GoogleFonts.poppins(textStyle: TextStyle(color: Colors.grey[300],fontSize: 14),)),
-                    ),
-                  );
+                  if(document.data()['Passenger_uid'] == auth.currentUser.uid)
+                    return Card(
+                      color: Colors.pinkAccent.shade200,
+                      child: new ListTile(
+                        title: new Text(convertDate(document.data()['Date']),style: GoogleFonts.poppins(textStyle: TextStyle(color: Colors.white,fontSize: 16),)),
+                        subtitle: new Text(document.data()['Address'],style: GoogleFonts.poppins(textStyle: TextStyle(color: Colors.grey[300],fontSize: 14),)),
+                      ),
+                    );
+                  else
+                    return Container();
                 }).toList(),
               ),
             ),
