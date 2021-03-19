@@ -1,14 +1,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:vacpass_app/src/screens/CustomTextField.dart';
-import './FirebaseService.dart';
+import './Services/CustomTextField.dart';
+import 'Services/firebaseservice.dart';
 import '../route.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 
-
 class LoginScreen extends StatefulWidget {
+
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -16,14 +17,14 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
-  final _formKey = GlobalKey<FormState>();
-  DateTime backbuttonpressedTime;
-
  final TextInputType keyEmail = TextInputType.emailAddress;
  final TextEditingController _email = TextEditingController();
 
  final TextInputType keyPass = TextInputType.text;
- TextEditingController _password = TextEditingController();
+ final TextEditingController _password = TextEditingController();
+ DateTime backbuttonpressedTime;
+
+  final _formKey = GlobalKey<FormState>();
 
 Widget buildForgetPassword(){
   return Container(
@@ -41,6 +42,7 @@ Widget buildForgetPassword(){
       )
   );
 }
+
 Widget buildLoginBtn(){
   return Container(
     padding: EdgeInsets.symmetric( vertical: 25),
@@ -62,23 +64,7 @@ Widget buildLoginBtn(){
         ),
         onPressed: (){
           if (_formKey.currentState.validate()) {
-           DatabaseService().signIn(context,_email.text,_password.text,_email ,_password);
-
-              // showDialog(context: context, builder: (context){
-              //         return Dialog(
-              //           child: Container(
-              //             width: MediaQuery.of(context).size.width / 1.5,
-              //             height: MediaQuery.of(context).size.height / 3,
-              //             child:  Center(
-              //                 child: Column(
-              //                   mainAxisAlignment: MainAxisAlignment.center,
-              //                   children: <Widget>[
-              //                       Text(err)
-              //                   ],),
-              //               ),
-              //           ),
-              //       );
-              //   });
+            DatabaseService().signIn(context,_email.text.trim(),_password.text.trim(),_email,_password);
           }
         },
     )
@@ -115,19 +101,18 @@ Widget buildSignUpBtn(){
     )
   );
 }
- 
-
-
-
 
   @override
   Widget build(BuildContext context){
-    return  Scaffold(
+    return WillPopScope(  
+      onWillPop: onWillPop,
+      child: Scaffold(
         body: AnnotatedRegion<SystemUiOverlayStyle>(
           value: SystemUiOverlayStyle.light,
           child: GestureDetector(
             child: Stack(
               children: <Widget>[
+                showAlert(),
                 Container(
                   height: double.infinity,
                   width: double.infinity,
@@ -156,7 +141,7 @@ Widget buildSignUpBtn(){
                         color: Colors.transparent,
                         child:  Image.asset('Images/vacpass-logo2.png', width:120, height: 120),
                       ),
-                      Text('Vaxipass',
+                      Text('VaxPass',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 40,
@@ -169,13 +154,12 @@ Widget buildSignUpBtn(){
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget> [
                             SizedBox(height: 50),
-                            CustomTextField(this._email, this.keyEmail, 'Email Address', 'email', false),
+                            CustomTextField(_email,keyEmail,'Email address', 'email', false),
                             SizedBox(height: 20),
-                            CustomTextField(this._password, this.keyPass, 'Password', 'password', true),
+                            CustomTextField(_password,keyPass,'Password', 'password', true),
                             buildForgetPassword(),
                             buildLoginBtn(),
                             buildSignUpBtn(),  
-                            
                         ],
                         )
                      )
@@ -187,7 +171,34 @@ Widget buildSignUpBtn(){
             )
           )
         )
+      ),
+    );
+  }
+  Future<bool> onWillPop() async {
+    DateTime currentTime = DateTime.now();
+    bool backButton = backbuttonpressedTime == null ||
+      currentTime.difference(backbuttonpressedTime) > Duration(seconds: 2);
+    if(backButton){
+      backbuttonpressedTime = currentTime;
+      Fluttertoast.showToast(
+        msg: 'Double tap to exit the app',
+        backgroundColor: Colors.grey,
+        textColor: Colors.white
       );
+      return false;
+    }
+    return true;
   }
+  Widget showAlert(){
+    if('error'  != null){
+      return Container(
+        color: Colors.amberAccent,
+        width: double.infinity,
+        padding: EdgeInsets.all(8.0),
+        child: Row(),
+      );
+    }
+    return SizedBox(height: 0,);
   }
- 
+}
+   

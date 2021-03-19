@@ -5,10 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-// import 'package:intl/intl_browser.dart';
-
 
 class HistoryPassenger extends StatefulWidget{
   @override 
@@ -48,6 +46,7 @@ class HistoryView extends State<HistoryPassenger>{
    }
    return monthname;
  }
+ 
   @override
   Widget build(BuildContext context) {
 
@@ -67,7 +66,7 @@ class HistoryView extends State<HistoryPassenger>{
             Scaffold(
               appBar: 
                 AppBar(
-                  title: Text('History', style: TextStyle(color: Colors.pinkAccent,fontSize: 28),), 
+                  title: Text('History', style: GoogleFonts.poppins(textStyle: TextStyle(color: Colors.pinkAccent,fontSize: 28),)), 
                   automaticallyImplyLeading: false, 
                   backgroundColor: Colors.white,
                   elevation: 0,
@@ -75,9 +74,10 @@ class HistoryView extends State<HistoryPassenger>{
               body: Column(
                 children: snapshot.data.docs.map((DocumentSnapshot document) {
                   return Card(
+                    color: Colors.pinkAccent.shade200,
                     child: new ListTile(
-                      title: new Text(convertDate(document.data()['Date'])),
-                      subtitle: new Text(document.data()['Address']),
+                      title: new Text(convertDate(document.data()['Date']),style: GoogleFonts.poppins(textStyle: TextStyle(color: Colors.white,fontSize: 16),)),
+                      subtitle: new Text(document.data()['Address'],style: GoogleFonts.poppins(textStyle: TextStyle(color: Colors.grey[300],fontSize: 14),)),
                     ),
                   );
                 }).toList(),

@@ -11,7 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:minimize_app/minimize_app.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import '../CustomTextField.dart';
+import '../Services/CustomTextField.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 
@@ -362,16 +362,13 @@ Future<void> scan() async{
                                   width:MediaQuery.of(context).size.width/1.5,
                                   height:40,
                                   child: 
-                                   ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          // background color
-                                          primary: Colors.pinkAccent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                                          ),
-                                        ),
-                                      child: Text('Scan a code',style: TextStyle(color: Colors.white),),
-                                      onPressed: scan, 
+                                    RaisedButton(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                                      ),
+                                      color: Colors.pinkAccent,
+                                      onPressed: scan,
+                                      child: Text('SCAN QR CODE',style: TextStyle(color: Colors.white),),
                                     ),
                                 ),
                                 SizedBox(height:MediaQuery.of(context).size.height * 0.02),
@@ -379,14 +376,11 @@ Future<void> scan() async{
                                   width:MediaQuery.of(context).size.width/1.5,
                                   height:40,
                                   child: 
-                                    ElevatedButton(
-                                       style: ElevatedButton.styleFrom(
-                                          // background color
-                                          primary: Colors.pinkAccent,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                                          ),
-                                        ),
+                                    RaisedButton(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(30)),
+                                      ),
+                                      color: Colors.pinkAccent,
                                       onPressed: searchVaccineNumber,
                                       child: Text('SEARCH VACCINE NO.',style: TextStyle(color: Colors.white),),
                                     ),
