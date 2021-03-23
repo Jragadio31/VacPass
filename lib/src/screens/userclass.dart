@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+import '../route.dart';
 
 class UserData{
   final db = FirebaseFirestore.instance.collection('users');
@@ -11,10 +13,10 @@ class UserData{
   String manufacturer;
   String brandname;
   int brandnumber;
-  DateTime datevaccined;
+  String datevaccined;
   String placevaccined;
   String physicianname;
-  DateTime rtpcrdate;
+  String rtpcrdate;
   String licenseno;
   bool status;
   
@@ -56,11 +58,11 @@ class UserData{
   }
 
   String getDateVaccined(){
-    return convertDatetoString(this.datevaccined);
+    return this.datevaccined;
   }
   
   String getDateRTPCR(){
-    return convertDatetoString(this.rtpcrdate);
+    return this.rtpcrdate;
   }
 
   void setFirstname(String firstname){
@@ -88,7 +90,7 @@ class UserData{
   }
 
   void setDateVaccined(DateTime datevaccined){
-    this.datevaccined = datevaccined;
+    this.datevaccined = datevaccined.toString();
   }
 
   void setPlaceVaccined(String placevaccined){
@@ -100,7 +102,7 @@ class UserData{
   }
 
   void setDateRTPCR(DateTime rtpcrdate){
-    this.rtpcrdate = rtpcrdate;
+    this.rtpcrdate = rtpcrdate.toString();
   }
   
   void setLicenseNo(String licenseno){
@@ -139,7 +141,7 @@ class UserData{
     }
   }
 
-  bool addPassengerInfo(){
+  bool addPassengerInfo(BuildContext context) {
     bool processStatus = false;
 
     db
@@ -159,7 +161,7 @@ class UserData{
         'role': 'passenger',
         'Status': true,
       }).then((value) =>
-          processStatus = true
+        Navigator.of(context).pushNamed(AppRoutes.authPassenger),
       );
 
     return processStatus;

@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:vacpass_app/src/route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:vacpass_app/src/screens/CustomTextField.dart';
-import './userclass.dart';
+import './Services/CustomTextField.dart';
+import './Services/userclass.dart';
 import '../route.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -53,8 +53,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
+  bool obs = true;
 
 
+  String convertDate(DateTime _datevaccined){
+    return _datevaccined.month.toString() +'/'+ _datevaccined.day.toString() + '/' + _datevaccined.year.toString();
+  }
 Widget buildDateVaccined() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +105,7 @@ Widget buildDateVaccined() {
                         ).then((value) =>
                            setState(() {
                             _dateVacined = value;
-                            _dateVController..text = _dateVacined.toString();
+                            _dateVController..text = convertDate(_dateVacined) ;
                             if(_dateVController.text.isNotEmpty) setState(() {_datevaccinedlabel = 'Date of Vaccination'; });
                             if(_dateVController.text.isEmpty) setState(() {_datevaccinedlabel = ''; });
                           })
@@ -165,7 +169,7 @@ Widget buildlastRTPCR() {
                   ).then((value) =>
                       setState(() {
                       _lastRTPCR = value;
-                      _dateController..text = _lastRTPCR.toString();
+                      _dateController..text = convertDate(_lastRTPCR) ;
                       if(_dateController.text.isNotEmpty) setState(() {_lastrtpcrlabel = 'Last RT PCR Date'; });
                     })
                   );
@@ -201,7 +205,7 @@ Widget buildconfirmpassword() {
           ),
           height: 60,
           child: TextFormField(
-            obscureText: true,
+            obscureText: obs,
             controller: _confirmpassword,
             style: TextStyle(
               color: Colors.black87,
@@ -216,7 +220,11 @@ Widget buildconfirmpassword() {
               hintText: this._confirmpasswordlabel,
               hintStyle: TextStyle(
                 color: Colors.black38
-              )
+              ),
+              suffixIcon: IconButton(
+                onPressed:  (){setState(() {obs = !obs; });},
+                icon: obs ? Icon(Icons.visibility_off) : Icon(Icons.visibility)
+              ),
             ),
              validator: (String value) {
                   if (value.isEmpty) return 'Password is Required';
@@ -239,6 +247,7 @@ Widget buildSignInBtn(){
     padding: EdgeInsets.symmetric( vertical: 20),
     width: double.infinity,
     child: 
+      // ignore: deprecated_member_use
       RaisedButton(
         padding: EdgeInsets.all(12.0),
         shape: RoundedRectangleBorder(
@@ -267,37 +276,27 @@ Widget buildSignInBtn(){
                   _mbrand.text, 
                   _brandName.text, 
                   int.parse(_brandNumber.text), 
-                  _dateVacined, 
+                  _dateVController.text , 
                   _placeVacined.text, 
                   _physicianName.text, 
-                  _lastRTPCR, 
+                  _dateController.text, 
                   _licenseNumber.text
                   );
+                  bool stat = user.addPassengerInfo(context);
                   
-                  if(user.updateInformationData()) return Navigator.of(context).pushNamed(AppRoutes.authPassenger);
-                  showDialog(context: context, builder: (context){
-                      return Dialog(
-                        child: Container(
-                          width: MediaQuery.of(context).size.width / 1.5,
-                          height: MediaQuery.of(context).size.height / 3,
-                          child:  Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('User data has not been save.',style: TextStyle(color: Colors.red,fontSize: 20)),
-                                  Text('Please insert correct data.',style: TextStyle(color: Colors.red,fontSize: 20)),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      ElevatedButton(onPressed: (){Navigator.of(context).pop();}, child: Text('Okay')),
-                                    ],
-                                  )
-                                ],
-                              )
-                            ),
-                        ),
-                    );
-                });
+                  if(stat) {
+                    _firstName.clear();
+                    _lastName.clear();
+                    _address.clear();
+                    _mbrand.clear();
+                    _brandName.clear();
+                    _brandNumber.clear();
+                    _dateVController.clear();
+                    _placeVacined.clear();
+                    _physicianName.clear(); 
+                    _dateController.clear(); 
+                    _licenseNumber.clear();
+                  }
               });
             } on FirebaseAuthException catch(e){
               print(e.message);
@@ -312,6 +311,7 @@ Widget buildCancelBtn(){
   return Container(
     width: double.infinity,
     child: 
+      // ignore: deprecated_member_use
       RaisedButton(
         padding: EdgeInsets.all(12.0),
         shape: RoundedRectangleBorder(
@@ -327,6 +327,7 @@ Widget buildCancelBtn(){
           ),
         ),
         onPressed: (){
+          Navigator.of(context).pop();
           Navigator.of(context).pushNamed(AppRoutes.authLogin);
         },
     )
@@ -355,9 +356,9 @@ Widget buildCancelBtn(){
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.pinkAccent,
-                      Colors.pink,
-                      Colors.purple[300],
-                      Colors.purpleAccent,
+                      Colors.pinkAccent,
+                      Colors.pinkAccent,
+                      Colors.pinkAccent,
                     ]
                   )
                 ),
