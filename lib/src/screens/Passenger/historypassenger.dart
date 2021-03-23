@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import '../Services/firebaseservice.dart';
 
 class HistoryPassenger extends StatefulWidget{
   @override 
@@ -52,7 +51,7 @@ class HistoryView extends State<HistoryPassenger>{
   Widget build(BuildContext context) {
 
     return StreamBuilder<QuerySnapshot>(
-      stream: DatabaseService().getHistory(),
+      stream: users.snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Text('Something went wrong');
@@ -95,10 +94,8 @@ class HistoryView extends State<HistoryPassenger>{
   
 }
 
-// ignore: missing_return
 Widget animate(){
   @override 
-  // ignore: unused_element
   Widget build(BuildContext context){
     Timer(Duration(seconds: 2),()=> Navigator.of(context).pop());
     return Scaffold(

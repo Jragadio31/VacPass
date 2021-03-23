@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import './Services/CustomTextField.dart';
 import 'Services/firebaseservice.dart';
 import '../route.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -123,6 +124,7 @@ Widget buildSignUpBtn(){
               children: <Widget>[
                 showAlert(),
                 Container(
+<<<<<<< HEAD
                   height: MediaQuery.of(context).size.height,
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -130,7 +132,6 @@ Widget buildSignUpBtn(){
                   ),
                   child:Padding(
                     padding: const EdgeInsets.all(25),
-                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Expanded(
@@ -168,14 +169,14 @@ Widget buildSignUpBtn(){
                         )
                       ],
                      ),
-                  )
-                )
-              ],
-            )
-          )
-      ),
-    );
-  }
+=======
+                  height: double.infinity,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
 
 
   Widget showAlert(){
@@ -190,6 +191,7 @@ Widget buildSignUpBtn(){
     return SizedBox(height: 0,);
   }
 }
+<<<<<<< HEAD
    
   //  AnnotatedRegion<SystemUiOverlayStyle>(
   //         value: SystemUiOverlayStyle.light,
@@ -204,3 +206,6 @@ Widget buildSignUpBtn(){
   //                   ),
   //                   child: 
   //                 )
+=======
+   
+>>>>>>> 97e973c90ab505df77b207601bb2478ceeb2a94f

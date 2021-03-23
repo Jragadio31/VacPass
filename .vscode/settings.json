@@ -3,6 +3,10 @@
         "Cupertino",
         "Schyler",
         "firestore",
+<<<<<<< HEAD
+=======
+        "fluttertoast",
+>>>>>>> 97e973c90ab505df77b207601bb2478ceeb2a94f
         "geocoder",
         "geolocator",
         "qrscan",

@@ -133,9 +133,6 @@ class SettingsView extends State<Settings>{
                                       onPressed: (){
                                         auth.signOut();
                                         Navigator.of(context).popAndPushNamed(AppRoutes.authLogin);
-                                      },
-                                      child: Text('Sign out', style: TextStyle(color: Colors.white),),
-                                    ),
                                   )
                               ]
                             )

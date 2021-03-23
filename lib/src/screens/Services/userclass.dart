@@ -125,6 +125,7 @@ class UserData{
     db
     .doc(this.uid)
     .set({
+<<<<<<< HEAD
         'L_name': this._lastname,
         'F_name': this._firstname,
         'Address': this._address,
@@ -140,10 +141,13 @@ class UserData{
         'Status': true,
       }).then((value) =>{
           Navigator.of(context).pop(),
-          Navigator.of(context).pushNamed(AppRoutes.authPassenger),
-        }
-      );
-
-    return processStatus;
-  }
-}
+=======
+        'L_name': this.lastname,
+        'F_name': this.firstname,
+        'Address': this.address,
+        'M_Brand': this.manufacturer,
+        'Brand_name': this.brandname,
+        'Brand_number': this.brandnumber,
+        'Date_of_Vaccination': this.datevaccined,
+        'Placed_vacined': this.placevaccined,
+        'Physician_name': this.physicianname,

@@ -183,9 +183,13 @@ class ProfileView extends State<Profile>{
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+<<<<<<< HEAD
               // ignore: deprecated_member_use
               FlatButton.icon(onPressed: (){takePhoto(ImageSource.camera);}, icon: Icon(Icons.camera), label: Text('Upload Image')),
               // ignore: deprecated_member_use
+=======
+              FlatButton.icon(onPressed: (){takePhoto(ImageSource.camera);}, icon: Icon(Icons.camera), label: Text('Upload Image')),
+>>>>>>> 97e973c90ab505df77b207601bb2478ceeb2a94f
               FlatButton.icon(onPressed: (){takePhoto(ImageSource.gallery);}, icon: Icon(Icons.image), label: Text('Open Gallery')),
               
           ]

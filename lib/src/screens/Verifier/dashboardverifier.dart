@@ -186,6 +186,7 @@ Future<void> searchVacc() async {
                               borderRadius: BorderRadius.all(Radius.circular(5)),
                             ),
                             onPressed: (){
+<<<<<<< HEAD
                                 try{
                                   db
                                   .collection('VacpassHistory')
@@ -203,12 +204,19 @@ Future<void> searchVacc() async {
                             },
                             color: Colors.green[700],
                             child: Text('Close',style: GoogleFonts.poppins(textStyle: TextStyle(color: Colors.white,fontSize: 16),),),
+=======
+                                Navigator.of(context).pop(); 
+                            },
+                            color: Colors.green[700],
+                            child: Text('Close'),
+>>>>>>> 97e973c90ab505df77b207601bb2478ceeb2a94f
                           )
                         ],
                       ),
                     ),
               ),
           );
+<<<<<<< HEAD
         });
       }),
     // ignore: return_of_invalid_type_from_catch_error
@@ -220,6 +228,16 @@ Future<void> searchVacc() async {
 }
 //END OF SEARCH BY BRAND NUMBER.
 
+=======
+        }),
+      }),
+      
+    }).catchError((onError) => print('ID does not exist'));
+  } on Exception{
+    print('ID not found');
+  }
+}
+>>>>>>> 97e973c90ab505df77b207601bb2478ceeb2a94f
 Future<void> scan() async{
      await checkPermission();
   try{
@@ -232,7 +250,11 @@ Future<void> scan() async{
       setState(() {
         var code = barcode.split('.');
         uid = code[0];
+<<<<<<< HEAD
         print(code[6]);
+=======
+
+>>>>>>> 97e973c90ab505df77b207601bb2478ceeb2a94f
           showDialog(context: context, builder: (context){
             return Dialog(
                 shape: RoundedRectangleBorder(
@@ -245,6 +267,7 @@ Future<void> scan() async{
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
+<<<<<<< HEAD
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -283,6 +306,44 @@ Future<void> scan() async{
                           SizedBox(height: MediaQuery.of(context).size.height * 0.04,),
                           confirmedPass(),
                           // ignore: deprecated_member_use
+=======
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Manufacturer :',style: TextStyle(color: Colors.grey,fontSize: 18),),
+                              Text(code[1],style: TextStyle(color: Colors.grey,fontSize: 20),),
+                            ]
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Brand Name :',style: TextStyle(color: Colors.grey,fontSize: 18),),
+                              Text(code[2],style: TextStyle(color: Colors.grey,fontSize: 20),),
+                            ]
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Brand no. :',style: TextStyle(color: Colors.grey,fontSize: 18),),
+                              Text(code[3],style: TextStyle(color: Colors.grey,fontSize: 20),),
+                            ]
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('Physician Name :',style: TextStyle(color: Colors.grey,fontSize: 18),),
+                              Text(code[4],style: TextStyle(color: Colors.grey,fontSize: 20),),
+                            ]
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text('License no. :',style: TextStyle(color: Colors.grey,fontSize: 18),),
+                              Text(code[5],style: TextStyle(color: Colors.grey,fontSize: 20),),
+                            ]
+                          ),
+                          code[6] == 'true' ? confirmedPass() : rejectPass(),
+>>>>>>> 97e973c90ab505df77b207601bb2478ceeb2a94f
                           RaisedButton(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -351,6 +412,21 @@ Future<void> scan() async{
       );
   }
 
+<<<<<<< HEAD
+=======
+  Widget rejectPass(){
+    return 
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Reject ',style: TextStyle(color: Colors.green[700],fontSize: 18),),
+          Icon(Icons.close_fullscreen_sharp, color: Colors.green[700],),
+        ]
+      );
+  }
+
+
+>>>>>>> 97e973c90ab505df77b207601bb2478ceeb2a94f
   @override
   Widget build(BuildContext context) {
      return Container(
@@ -399,6 +475,12 @@ Future<void> scan() async{
                             children: [
                               SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                               Text(data['F_name'] +' '+ data['L_name'], style: TextStyle(fontSize: 22),),
+<<<<<<< HEAD
+=======
+                              FlatButton(onPressed: (){},
+                              child: Text('View Profile',style: TextStyle(color: Colors.grey,),)
+                              ),
+>>>>>>> 97e973c90ab505df77b207601bb2478ceeb2a94f
                             ],
                           ),
                           Center(
@@ -415,7 +497,10 @@ Future<void> scan() async{
                                   width:MediaQuery.of(context).size.width/1.5,
                                   height:40,
                                   child: 
+<<<<<<< HEAD
                                     // ignore: deprecated_member_use
+=======
+>>>>>>> 97e973c90ab505df77b207601bb2478ceeb2a94f
                                     RaisedButton(
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -430,7 +515,10 @@ Future<void> scan() async{
                                   width:MediaQuery.of(context).size.width/1.5,
                                   height:40,
                                   child: 
+<<<<<<< HEAD
                                     // ignore: deprecated_member_use
+=======
+>>>>>>> 97e973c90ab505df77b207601bb2478ceeb2a94f
                                     RaisedButton(
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -457,10 +545,15 @@ Future<void> scan() async{
   }
 }
 
+<<<<<<< HEAD
 // ignore: missing_return
 Widget animate(){
   @override 
   // ignore: unused_element
+=======
+Widget animate(){
+  @override 
+>>>>>>> 97e973c90ab505df77b207601bb2478ceeb2a94f
   Widget build(BuildContext context){
     Timer(Duration(seconds: 2),()=> print('reloads'));
     return Scaffold(

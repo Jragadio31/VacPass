@@ -44,10 +44,17 @@ dependencies:
   geocoding: ^2.0.0
   geocoder: ^0.2.1
   minimize_app: ^0.1.1 
+<<<<<<< HEAD
   intl: ^0.17.0
   google_fonts: ^2.0.0
   fluttertoast: ^7.1.8 
   carousel_pro: ^1.0.0
+=======
+  carousel_pro: ^1.0.0
+  fluttertoast: ^7.1.6
+  google_fonts: ^2.0.0
+
+>>>>>>> 97e973c90ab505df77b207601bb2478ceeb2a94f
 dev_dependencies:
   flutter_test:
     sdk: flutter
